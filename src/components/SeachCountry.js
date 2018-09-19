@@ -5,7 +5,8 @@ export default class SearchCountry extends React.Component {
     super(props);
     this.state = {
       searchCriteria: 'name',
-      searchTerm: ''
+      searchTerm: '',
+      regionBloc: 'EU'
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -16,7 +17,7 @@ export default class SearchCountry extends React.Component {
     console.log(this.state.searchCriteria, this.state.searchTerm);
     const params = {
       criteria: this.state.searchCriteria,
-      term: this.state.searchTerm
+      term: this.state.searchTerm == '' ? this.state.regionBloc : this.state.searchTerm
     };
     this.props.getCountryDetails(params)
     .then((res) => res.json(), (err) => console.log(err))
@@ -33,7 +34,7 @@ export default class SearchCountry extends React.Component {
       [name]: value
     });
 
-    console.log()
+    console.log(this.state.regionBloc)
   }
 
   renderInputBox() {
@@ -73,9 +74,9 @@ export default class SearchCountry extends React.Component {
 
     return (
       <select className="custom-select ml-2 mr-2"
-        value={this.state.searchTerm}
+        value={this.state.regionBloc}
         onChange={this.handleChange}
-        name="searchTerm"
+        name="regionBloc"
         >
           {options}
       </select>
