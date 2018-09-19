@@ -62,7 +62,7 @@ class App extends Component {
   render() {
     return (
       <div className='container mt-2'>
-        <h3 className='text-center'>Country DB</h3>
+        <h3 className='text-center'>Country Deets!</h3>
         {this.renderSearchCountry()}
 
         {this.renderPlaceholderListText()}
