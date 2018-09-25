@@ -14,14 +14,9 @@ export default class SearchCountry extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state.searchCriteria, this.state.searchTerm);
-    const params = {
-      criteria: this.state.searchCriteria,
-      term: this.state.searchTerm == '' ? this.state.regionBloc : this.state.searchTerm
-    };
-    this.props.getCountryDetails(params)
-    .then((res) => res.json(), (err) => console.log(err))
-    .then(res => console.log(res));
+    // pass a copy of state object
+    // console.log(this.state);
+    this.props.getSearchResults(Object.assign({}, this.state));
     event.preventDefault();
   }
 
@@ -33,8 +28,6 @@ export default class SearchCountry extends React.Component {
     this.setState({
       [name]: value
     });
-
-    console.log(this.state.regionBloc)
   }
 
   renderInputBox() {

@@ -1,48 +1,35 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import SearchCountry from './components/SeachCountry';
+import SearchCountry from './components/SearchCountry';
+import CountryList from './components/CountryList';
+import CountryService from './CountryService';
 
 class App extends Component {
   constructor() {
     super();
-    this.getCountryDetails = this.getCountryDetails.bind(this);
-  }
-
-  getUri(criteria, params) {
-    let uri = 'https://restcountries.eu/rest/v2/';
-    switch(criteria) {
-      case 'name':
-        return uri + 'name/' + params;
-      case 'fullName':
-        return uri + 'name/' + params + '?fullText=true';
-      case 'code':
-        return uri + 'aplha?codes=' + params;
-      case 'currency':
-        return uri + 'currency/' + params;
-      case 'language':
-        return uri + 'lang/' + params;
-      case 'capitalCity':
-        return uri + 'capital/' + params;
-      case 'callingCode':
-        return uri + 'callingcode/' + params;
-      case 'region':
-        return uri + 'region/' + params;
-      case 'regionalBloc':
-        return uri + 'regionalbloc/' + params;
+    this.state = {
+      list: []
     }
   }
 
-  getCountryDetails(params) {
-    console.log('Get da country details.....');
-    const uri = this.getUri(params.criteria, params.term);
-    console.log(uri);
-    return fetch(uri);
+  getSearchResults(params) {
+    let countryService = new CountryService();
+    console.log(params);
+    console.log(countryService.getUri(params));
+    let uri = countryService.getUri(params);
+    countryService.getResults(uri)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({list: res});
+    })
+    .catch(error => console.log(error));
   }
 
   renderSearchCountry() {
     return (
       <SearchCountry 
+      getSearchResults={this.getSearchResults.bind(this)}
       getCountryDetails={this.getCountryDetails}>
       </SearchCountry>
     )
@@ -62,11 +49,8 @@ class App extends Component {
   render() {
     return (
       <div className='container mt-2'>
-        <h3 className='text-center'>Country Deets!</h3>
-        {this.renderSearchCountry()}
-
-        {this.renderPlaceholderListText()}
-
+      {this.renderSearchCountry()}
+      <CountryList list={this.state.list}></CountryList>
       </div>
     );
   }
